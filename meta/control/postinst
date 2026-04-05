@@ -1,0 +1,16 @@
+#!/bin/sh
+CONFIG=/etc/enigma2
+PLUGIN=/usr/lib/enigma2/python/Plugins/Extensions/PlutoTV
+mkdir -p $CONFIG/Simple_Ten_Eighty
+cp -avr $PLUGIN/skin/Simple_Ten_Eighty/* $CONFIG/Simple_Ten_Eighty/.
+
+echo "***********************************"
+echo "*            PlutoTV              *"
+echo "*               by                *"
+echo "*           xcentaurix            *"
+echo "***********************************"
+echo ""
+echo "Plugin installed successfully."
+echo "Please restart Enigma2 now!"
+echo ""
+exit 0

@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "Cleaning up after PlutoTV removal..."
+rm -rf /usr/lib/enigma2/python/Plugins/Extensions/PlutoTV > /dev/null 2>&1
+rm -rf /etc/enigma2/PlutoTV > /dev/null 2>&1
+find /etc/enigma2/ -maxdepth 1 \( -name 'PlutoTV*' -o -name 'plutotv*' \) 2>/dev/null | xargs -r rm
+exit 0

@@ -1,0 +1,14 @@
+Package: enigma2-plugin-extensions-plutotv
+Version: 0.1.10
+Plugin: PlutoTV
+Description: PlutoTV plugin for enigma2
+Section: base
+Priority: optional
+Maintainer: xcentaurix
+Homepage: https://github.com/OpenCockpit/PlutoTV
+Git: git://github.com/OpenCockpit/PlutoTV.git
+Architecture: all
+OE: enigma2-plugin-extensions-plutotv
+License: GPL-3.0-or-later
+Homepage: https://github.com/OpenCockpit/PlutoTV
+Source: https://github.com/OpenCockpit/PlutoTV/blob/master/build.sh
