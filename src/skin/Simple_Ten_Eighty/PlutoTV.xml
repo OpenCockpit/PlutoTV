@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skin>
 	<screen name="PlutoTV" position="fill" flags="wfNoBorder">
-		<ePixmap pixmap="extensions/plutotv-backdrop.jpg" position="0,0" size="e,1020" zPosition="-1"/>
+		<ePixmap pixmap="plutotv-backdrop.jpg" position="0,0" size="e,1020" zPosition="-1"/>
 
 		<ePixmap position="70,170" size="615,750" pixmap="extensions/transblack.png" zPosition="1" alphatest="blend" transparent="1"/><!-- list background -->
 		<widget name="feedlist" position="70,170" size="615,728" enableWrapAround="1" zPosition="5" scrollbarMode="showOnDemand" transparent="1"/>
