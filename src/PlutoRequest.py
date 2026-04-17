@@ -45,12 +45,16 @@ class _PlutoSlot:
         except Exception:
             return 0
 
-    def boot(self, country=None):
+    def boot(self, country=None, allow_stale=False):
         country = country or config.plugins.plutotv.country.value
         now = time.time()
 
         if country in self.bootCache:
             if now < self.bootCache[country]["exp"] - 60:
+                return self.bootCache[country]["response"]
+            if allow_stale:
+                # Return stale cache immediately to avoid blocking the main thread.
+                # The caller should arrange a background refresh.
                 return self.bootCache[country]["response"]
 
         headers = {
@@ -87,7 +91,7 @@ class _PlutoSlot:
             headers['X-Forwarded-For'] = ip
 
         try:
-            response = self.session.get(PlutoRequest.BOOT_URL, headers=headers, params=params, timeout=10)
+            response = self.session.get(PlutoRequest.BOOT_URL, headers=headers, params=params, timeout=3)
             response.raise_for_status()
             resp = response.json()
             self.bootCache[country] = {
@@ -100,6 +104,9 @@ class _PlutoSlot:
             return resp
         except Exception as e:
             print(f"[PlutoTV] Slot {self.index} boot error: {e}")
+            # If we have stale data, return it rather than nothing
+            if country in self.bootCache:
+                return self.bootCache[country]["response"]
             return {}
 
 
@@ -178,11 +185,19 @@ class PlutoRequest:
 
         Uses a pool slot so each concurrent stream gets its own clientID
         device identity, preventing Pluto from killing concurrent streams.
+
+        Uses allow_stale=True so this never blocks the main thread waiting
+        for an HTTP response.  A background refresh is scheduled if the
+        cached token was stale.
         """
         country = country or config.plugins.plutotv.country.value
         slot = self._nextStreamSlot()
-        slot.boot(country)
+        slot.boot(country, allow_stale=True)
         cache = slot.bootCache.get(country, {})
+        # Schedule a background refresh if the token is stale or missing
+        now = time.time()
+        if not cache or now >= cache.get("exp", 0) - 60:
+            self._scheduleBackgroundRefresh(slot, country)
         token = cache.get('response', {}).get('sessionToken', '')
         stitcherUrl = cache.get('stitcherUrl', self.STITCHER_FALLBACK)
         stitcherParams = cache.get('stitcherParams', '')
@@ -194,6 +209,15 @@ class PlutoRequest:
             url += f"&{stitcherParams}"
         print(f"[PlutoTV] buildStreamURL slot {slot.index} for {channel_id}")
         return url
+
+    @staticmethod
+    def _scheduleBackgroundRefresh(slot, country):
+        """Schedule a non-blocking token refresh in a background thread."""
+        try:
+            from twisted.internet import threads
+            threads.deferToThread(slot.boot, country)
+        except Exception:
+            pass
 
     def _apiHeaders(self, country=None):
         """Build authorization headers for api.pluto.tv endpoints (VOD)."""
@@ -458,6 +482,18 @@ class PlutoRequest:
 
 
 plutoRequest = PlutoRequest()
+
+
+def startProactiveRefresh():
+    """Periodically refresh boot tokens before they expire so that
+    synchronous callers (service extensions) never have to block."""
+    from twisted.internet import reactor, threads
+    now = time.time()
+    for slot in plutoRequest._pool:
+        for country, cache in list(slot.bootCache.items()):
+            if now >= cache.get("exp", 0) - 300:  # refresh 5 min before expiry
+                threads.deferToThread(slot.boot, country)
+    reactor.callLater(120, startProactiveRefresh)
 
 
 def playServiceExtension(nav, sref, *_args, **_kwargs):

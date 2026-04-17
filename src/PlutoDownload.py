@@ -18,7 +18,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Tools.Directories import fileExists
 from enigma import eDVBDB, eEPGCache, eTimer
-from twisted.internet import threads  # for updating GUI widgets
+from twisted.internet import threads, reactor
 
 # for localized messages
 from . import _
@@ -54,12 +54,20 @@ class PlutoDownloadBase():
             return
         self.ccGenerator = self.cc()
         self.piconFetcher = PiconFetcher(self)
-        self.manager()
+        threads.deferToThread(self._downloadThread)
 
-    def manager(self):
+    def _downloadThread(self):
+        """Run the entire download workflow in a background thread."""
+        try:
+            self._managerThread()
+        except Exception as e:
+            print(f"[PlutoDownload] Error in download thread: {e}")
+            PlutoDownloadBase.downloadActive = False
+
+    def _managerThread(self):
         PlutoDownloadBase.downloadActive = True
         if cc := next(self.ccGenerator, None):
-            self.downloadBouquet(cc)
+            self._downloadBouquetThread(cc)
         else:
             self.channelsList.clear()
             self.guideList.clear()
@@ -68,28 +76,32 @@ class PlutoDownloadBase():
             self.ccGenerator = None
             if self.piconFetcher.piconList:
                 self.total = len(self.piconFetcher.piconList)
-                threads.deferToThread(self.updateProgressBar, 0)  # reset
-                threads.deferToThread(self.updateAction, _("picons"))  # GUI widget
-                threads.deferToThread(self.updateStatus, _("Fetching picons..."))  # GUI widget
+                reactor.callFromThread(self.updateProgressBar, 0)
+                reactor.callFromThread(self.updateAction, _("picons"))
+                reactor.callFromThread(self.updateStatus, _("Fetching picons..."))
                 self.piconFetcher.fetchPicons()
-                threads.deferToThread(self.updateProgressBar, self.total)  # reset
+                reactor.callFromThread(self.updateProgressBar, self.total)
             self.piconFetcher = None
-            threads.deferToThread(self.updateStatus, _("LiveTV update completed"))  # GUI widget
+            reactor.callFromThread(self.updateStatus, _("LiveTV update completed"))
             time.sleep(3)
-            self.exitOk()
-            self.start()
+            reactor.callFromThread(self.exitOk)
+            reactor.callFromThread(self.start)
 
-    def downloadBouquet(self, cc):
+    def manager(self):
+        """Legacy entry point - redirects to threaded version."""
+        threads.deferToThread(self._managerThread)
+
+    def _downloadBouquetThread(self, cc):
         self.bouquet = []
         self.bouquetCC = cc
         self.tsid = TSIDS.get(cc, "0")
-        self.stop()
+        reactor.callFromThread(self.stop)
         self.channelsList.clear()
         self.guideList.clear()
         self.categories.clear()
-        threads.deferToThread(self.updateAction, cc)  # GUI widget
-        threads.deferToThread(self.updateProgressBar, 0)  # reset
-        threads.deferToThread(self.updateStatus, _("Processing data..."))  # GUI widget
+        reactor.callFromThread(self.updateAction, cc)
+        reactor.callFromThread(self.updateProgressBar, 0)
+        reactor.callFromThread(self.updateStatus, _("Processing data..."))
         channels = sorted(plutoRequest.getChannels(cc), key=lambda x: x["number"])
         guide = self.getGuidedata(cc)
         for channel in channels:
@@ -103,7 +115,7 @@ class PlutoDownloadBase():
         self.total = len(channels)
 
         if len(self.categories) == 0:
-            self.noCategories()
+            reactor.callFromThread(self.noCategories)
         else:
             if self.categories[0] in self.channelsList:
                 self.subtotal = len(self.channelsList[self.categories[0]])
@@ -118,7 +130,7 @@ class PlutoDownloadBase():
 
     def updateprogress(self, param):
         if hasattr(self, "state") and self.state == 1:  # hack for exit before end
-            threads.deferToThread(self.updateProgressBar, param)
+            reactor.callFromThread(self.updateProgressBar, param)
             if param < self.total:
                 key = self.categories[self.key]
                 if self.chitem == self.subtotal:
@@ -149,7 +161,7 @@ class PlutoDownloadBase():
                 self.bouquet.append(f"{ref}:{stream_url}:{ch_name}")
                 self.chitem += 1
                 # print("[updateprogress] ref", ref)
-                threads.deferToThread(self.updateStatus, _("Waiting for Channel: ") + ch_name)  # GUI widget
+                reactor.callFromThread(self.updateStatus, _("Waiting for Channel: ") + ch_name)
 
                 chevents = []
                 if ch_hash in self.guideList:
@@ -164,13 +176,13 @@ class PlutoDownloadBase():
                 if len(chevents) > 0:
                     iterator = iter(chevents)
                     events_tuple = tuple(iterator)
-                    self.epgcache.importEvents(ref + ":https%3a//.m3u8", events_tuple)
+                    reactor.callFromThread(self.epgcache.importEvents, ref + ":https%3a//.m3u8", events_tuple)
 
                 self.piconFetcher.addPicon(ref, ch_name, ch_logourl, self.silent)
             else:
                 bouquet_name = BOUQUET_NAME % COUNTRY_NAMES.get(self.bouquetCC, self.bouquetCC)
                 bouquet_file = BOUQUET_FILE % self.bouquetCC
-                eDVBDB.getInstance().addOrUpdateBouquet(bouquet_name, bouquet_file, self.bouquet, False)  # place at bottom if not exists
+                reactor.callFromThread(eDVBDB.getInstance().addOrUpdateBouquet, bouquet_name, bouquet_file, self.bouquet, False)
                 # addOrUpdateBouquet doesn't update #NAME for existing bouquets, so patch the file
                 bouquet_path = "/etc/enigma2/" + bouquet_file
                 if os.path.isfile(bouquet_path):
@@ -183,7 +195,7 @@ class PlutoDownloadBase():
                 os.makedirs(os.path.dirname(TIMER_FILE), exist_ok=True)  # create config folder recursive if not exists
                 with open(TIMER_FILE, "w", encoding="utf-8") as f:
                     f.write(str(time.time()))
-                self.manager()
+                self._managerThread()
 
     def buildGuide(self, event):
         # (title, summary, start, duration, genre)

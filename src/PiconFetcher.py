@@ -9,11 +9,11 @@ import os
 import shutil
 import threading
 import time
+from itertools import count as _count
 
 from Components.config import config
 from Tools.Directories import fileExists, sanitizeFilename
 import requests
-from twisted.internet import threads  # for deferToThread callback
 
 from .Variables import PLUGIN_FOLDER, PLUGIN_ICON, USER_AGENT
 
@@ -44,7 +44,7 @@ class PiconFetcher:
 
     def fetchPicons(self):
         maxthreads = 100  # make configurable
-        self.counter = 0
+        self._counter = _count()
         failed = []
         self.createFolders()
         if self.piconList:
@@ -63,7 +63,7 @@ class PiconFetcher:
 
     def downloadURL(self, url, piconname):
         filepath = os.path.join(self.pluginPiconDir, piconname.removeprefix(self.piconDir).removeprefix(os.sep))  # second removeprefix ensures no leading / is left on the filename as this would be recognised as an absolute path by os.path.join and the join would be skipped
-        self.counter += 1
+        counter = next(self._counter)
         try:
             response = requests.get(f"{url}{self.resolutionStr}", timeout=2.50, headers={"User-Agent": USER_AGENT})
             response.raise_for_status()
@@ -77,7 +77,8 @@ class PiconFetcher:
             filepath = self.defaultIcon
         self.makesoftlink(filepath, piconname)
         if self.parent:
-            threads.deferToThread(self.parent.updateProgressBar, self.counter)
+            from twisted.internet.reactor import callFromThread
+            callFromThread(self.parent.updateProgressBar, counter)
 
     def makesoftlink(self, filepath, softlinkpath):
         svgpath = softlinkpath.removesuffix(".png") + ".svg"

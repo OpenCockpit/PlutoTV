@@ -50,7 +50,7 @@ from skin import applySkinFactor, fonts, parameters
 
 from . import _, __
 from .PlutoConfig import COUNTRY_NAMES, getselectedcountries
-from .PlutoRequest import plutoRequest, playServiceExtension, recordServiceExtension
+from .PlutoRequest import plutoRequest, playServiceExtension, recordServiceExtension, startProactiveRefresh
 from .PlutoDownload import PlutoDownload, Silent
 from .PiconFetcher import PiconFetcher
 from .PlutoUtils import resumePointsInstance, downloadPoster, pickBestImage
@@ -681,6 +681,8 @@ def sessionstart(reason, session, **kwargs):  # pylint: disable=unused-argument
     if hasattr(session.nav, "recordServiceExtensions") and recordServiceExtension not in session.nav.recordServiceExtensions:
         session.nav.recordServiceExtensions.append(recordServiceExtension)
     Silent.init(session)
+    from twisted.internet import reactor
+    reactor.callLater(30, startProactiveRefresh)
 
 
 def Download_PlutoTV(session, **_kwargs):

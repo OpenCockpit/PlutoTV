@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 12:00+0000\n"
+"POT-Creation-Date: 2026-04-17 15:38+0000\n"
 "PO-Revision-Date: 2025-09-04 15:40+0300\n"
 "Last-Translator: Orlandox\n"
 "Language-Team: Orlandox\n"
@@ -43,7 +43,7 @@ msgstr "Tietojen sijainti"
 msgid "Do you want to resume this playback?"
 msgstr "Haluatko jatkaa tätä toistoa?"
 
-#: ../src/plugin.py:697
+#: ../src/plugin.py:699
 msgid "Download PlutoTV bouquet, picons and EPG"
 msgstr "Lataa PlutoTV-suosikkilista, piconit ja EPG"
 
@@ -55,7 +55,7 @@ msgstr "Jakso"
 msgid "Exit"
 msgstr "Poistu"
 
-#: ../src/PlutoDownload.py:73
+#: ../src/PlutoDownload.py:81
 msgid "Fetching picons..."
 msgstr "Noudetaan piconeita..."
 
@@ -97,7 +97,7 @@ msgstr "LiveTV-suosikkilista on päivitettävä. Paina VIHREÄ."
 msgid "LiveTV bouquet %s"
 msgstr "LiveTV-suosikkilista %s"
 
-#: ../src/PlutoDownload.py:77
+#: ../src/PlutoDownload.py:85
 msgid "LiveTV update completed"
 msgstr "LiveTV:n päivitys valmis"
 
@@ -129,12 +129,12 @@ msgstr "Avaa lisäosan asetukset"
 msgid "Picon type"
 msgstr "Piconin tyyppi"
 
-#: ../src/PlutoDownload.py:325
+#: ../src/PlutoDownload.py:337
 msgid "Please wait..."
 msgstr "Odota..."
 
 #: ../src/plugin.py:227 ../src/plugin.py:398 ../src/plugin.py:415
-#: ../src/plugin.py:463 ../src/plugin.py:475 ../src/plugin.py:696
+#: ../src/plugin.py:463 ../src/plugin.py:475 ../src/plugin.py:698
 msgid "PlutoTV"
 msgstr "PlutoTV"
 
@@ -142,11 +142,11 @@ msgstr "PlutoTV"
 msgid "PlutoTV Setup"
 msgstr "PlutoTV:n asetukset"
 
-#: ../src/PlutoDownload.py:318
+#: ../src/PlutoDownload.py:330
 msgid "PlutoTV updating"
 msgstr "PlutoTV:n päivitys"
 
-#: ../src/PlutoDownload.py:92
+#: ../src/PlutoDownload.py:104
 msgid "Processing data..."
 msgstr "Käsitellään tietoja..."
 
@@ -188,7 +188,7 @@ msgstr "Valitse maa, jolle Tilaus-TV (VoD) -lista luodaan."
 msgid "Select the stream provider. Stitcher uses the native Pluto server with JWT auth (resolved at playback). JMP2 uses the jmp2.uk proxy. i.mjh.nz uses Matt Huisman's community playlist. Requires bouquet update to take effect."
 msgstr ""
 
-#: ../src/plugin.py:698
+#: ../src/plugin.py:700
 msgid "Silently download PlutoTV"
 msgstr "Lataa PlutoTV hiljaisesti"
 
@@ -218,11 +218,11 @@ msgstr ""
 "\n"
 "Kaikki päivitetään automaattisesti 5 tunnin välein."
 
-#: ../src/PlutoDownload.py:337
+#: ../src/PlutoDownload.py:349
 msgid "The download is in progress. Exit now?"
 msgstr "Lataus käynnissä. Poistutaanko nyt?"
 
-#: ../src/PlutoDownload.py:362 ../src/plugin.py:312
+#: ../src/PlutoDownload.py:374 ../src/plugin.py:312
 msgid "There is no data, it is possible that Pluto TV is not available in your country"
 msgstr "Dataa ei ole, joten PlutoTV ei ehkä ole saatavilla maassasi"
 
@@ -230,7 +230,7 @@ msgstr "Dataa ei ole, joten PlutoTV ei ehkä ole saatavilla maassasi"
 msgid "Update LiveTV Bouquet"
 msgstr "Päivitä LiveTV-suosikkilista"
 
-#: ../src/PlutoDownload.py:330
+#: ../src/PlutoDownload.py:342
 #, python-format
 msgid "Updating: Pluto TV %s"
 msgstr "Päivitetään: PlutoTV %s"
@@ -247,7 +247,7 @@ msgstr "Kanavan nimisten (SNP) piconien käyttö tarkoittaa, että ne toimivat e
 msgid "VOD Menu"
 msgstr "VOD-Menu"
 
-#: ../src/plugin.py:696
+#: ../src/plugin.py:698
 msgid "View video on demand and download a bouquet of live tv channels"
 msgstr "Katso tilaus-TV:ta ja lataa LiveTV-kanavien suosikkilista"
 
@@ -255,7 +255,7 @@ msgstr "Katso tilaus-TV:ta ja lataa LiveTV-kanavien suosikkilista"
 msgid "VoD country"
 msgstr "Tilaus-TV:n (VOD) maa"
 
-#: ../src/PlutoDownload.py:152
+#: ../src/PlutoDownload.py:164
 msgid "Waiting for Channel: "
 msgstr "Odotetaan kanavaa: "
 
@@ -263,7 +263,7 @@ msgstr "Odotetaan kanavaa: "
 msgid "i.mjh.nz"
 msgstr ""
 
-#: ../src/PlutoDownload.py:72
+#: ../src/PlutoDownload.py:80
 msgid "picons"
 msgstr "piconit"
 

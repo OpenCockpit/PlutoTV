@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PlutoTV\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 12:00+0000\n"
+"POT-Creation-Date: 2026-04-17 15:38+0000\n"
 "PO-Revision-Date: 2025-08-03 14:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: morser\n"
@@ -45,7 +45,7 @@ msgstr "Dispositivo de datos"
 msgid "Do you want to resume this playback?"
 msgstr "¿Deseas reanudar este video donde se dejo?"
 
-#: ../src/plugin.py:697
+#: ../src/plugin.py:699
 msgid "Download PlutoTV bouquet, picons and EPG"
 msgstr "Descargar lista de canales de PlutoTV, picons y EPG"
 
@@ -57,7 +57,7 @@ msgstr "Episodio"
 msgid "Exit"
 msgstr "Salir"
 
-#: ../src/PlutoDownload.py:73
+#: ../src/PlutoDownload.py:81
 msgid "Fetching picons..."
 msgstr "Obteniendo picones..."
 
@@ -99,7 +99,7 @@ msgstr "Se necesitan actualizar los canales. Pulsa VERDE."
 msgid "LiveTV bouquet %s"
 msgstr "Grupo de canales %s"
 
-#: ../src/PlutoDownload.py:77
+#: ../src/PlutoDownload.py:85
 msgid "LiveTV update completed"
 msgstr "Grupo de canales actualizado"
 
@@ -131,12 +131,12 @@ msgstr "Abrir la pantalla de configuración"
 msgid "Picon type"
 msgstr "Tipo de picones"
 
-#: ../src/PlutoDownload.py:325
+#: ../src/PlutoDownload.py:337
 msgid "Please wait..."
 msgstr "Espere..."
 
 #: ../src/plugin.py:227 ../src/plugin.py:398 ../src/plugin.py:415
-#: ../src/plugin.py:463 ../src/plugin.py:475 ../src/plugin.py:696
+#: ../src/plugin.py:463 ../src/plugin.py:475 ../src/plugin.py:698
 msgid "PlutoTV"
 msgstr "PlutoTV"
 
@@ -144,11 +144,11 @@ msgstr "PlutoTV"
 msgid "PlutoTV Setup"
 msgstr "Configuración de Pluto TV"
 
-#: ../src/PlutoDownload.py:318
+#: ../src/PlutoDownload.py:330
 msgid "PlutoTV updating"
 msgstr "Pluto TV actualizando"
 
-#: ../src/PlutoDownload.py:92
+#: ../src/PlutoDownload.py:104
 msgid "Processing data..."
 msgstr "Procesando datos..."
 
@@ -190,7 +190,7 @@ msgstr "El país para el cual se creará la lista de video bajo demanda."
 msgid "Select the stream provider. Stitcher uses the native Pluto server with JWT auth (resolved at playback). JMP2 uses the jmp2.uk proxy. i.mjh.nz uses Matt Huisman's community playlist. Requires bouquet update to take effect."
 msgstr ""
 
-#: ../src/plugin.py:698
+#: ../src/plugin.py:700
 msgid "Silently download PlutoTV"
 msgstr "Descarga de PlutoTV en segundo plano"
 
@@ -220,11 +220,11 @@ msgstr ""
 "\n"
 "Todo se actualizará automáticamente cada 5 horas."
 
-#: ../src/PlutoDownload.py:337
+#: ../src/PlutoDownload.py:349
 msgid "The download is in progress. Exit now?"
 msgstr "La descarga está en proceso. Desea salir ahora?"
 
-#: ../src/PlutoDownload.py:362 ../src/plugin.py:312
+#: ../src/PlutoDownload.py:374 ../src/plugin.py:312
 msgid "There is no data, it is possible that Pluto TV is not available in your country"
 msgstr "No hay datos, es posible que Pluto TV no este disponible en tu Pais"
 
@@ -232,7 +232,7 @@ msgstr "No hay datos, es posible que Pluto TV no este disponible en tu Pais"
 msgid "Update LiveTV Bouquet"
 msgstr "Actualizar Lista de canales"
 
-#: ../src/PlutoDownload.py:330
+#: ../src/PlutoDownload.py:342
 #, python-format
 msgid "Updating: Pluto TV %s"
 msgstr "Actualizando: Pluto TV %s"
@@ -249,7 +249,7 @@ msgstr "El uso de picones de nombre de canal significa que seguirán funcionando
 msgid "VOD Menu"
 msgstr "Menú VOD"
 
-#: ../src/plugin.py:696
+#: ../src/plugin.py:698
 msgid "View video on demand and download a bouquet of live tv channels"
 msgstr "Ver Pluto TV bajo demanda y descargar lista de canales en vivo"
 
@@ -257,7 +257,7 @@ msgstr "Ver Pluto TV bajo demanda y descargar lista de canales en vivo"
 msgid "VoD country"
 msgstr "País de VoD"
 
-#: ../src/PlutoDownload.py:152
+#: ../src/PlutoDownload.py:164
 msgid "Waiting for Channel: "
 msgstr "Esperando el Canal: "
 
@@ -265,7 +265,7 @@ msgstr "Esperando el Canal: "
 msgid "i.mjh.nz"
 msgstr ""
 
-#: ../src/PlutoDownload.py:72
+#: ../src/PlutoDownload.py:80
 msgid "picons"
 msgstr "picones"
 
